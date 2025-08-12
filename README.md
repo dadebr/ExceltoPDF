@@ -1,6 +1,8 @@
 # ExceltoPDF
 
-A command-line tool to convert Excel files to PDF with optimized formatting that ensures all columns fit on one page per worksheet.
+Uma ferramenta com interface gráfica e linha de comando para converter arquivos Excel para PDF com formatação otimizada, garantindo que todas as colunas caibam em uma página por planilha.
+
+> **⚠️ Aviso Importante:** Este pacote ainda não está disponível no PyPI. Para instalar, clone o repositório e instale a partir do código fonte.
 
 ## Features
 
@@ -23,12 +25,6 @@ cd ExceltoPDF
 pip install -e .
 ```
 
-### From PyPI
-
-```bash
-pip install exceltopdf
-```
-
 ### Dependencies
 
 The tool will automatically use the best available method:
@@ -46,6 +42,43 @@ pip install pandas openpyxl reportlab
 All dependencies are listed in requirements.txt and will be installed automatically.
 
 ## Usage
+
+### Graphical User Interface (GUI)
+
+To launch the graphical interface:
+```bash
+exceltopdf-gui
+```
+
+Alternatively, if the command is not available:
+```bash
+python -m exceltopdf.gui
+```
+
+#### GUI Features
+
+• File Selection: Browse buttons for choosing Excel input and PDF output files
+• Conversion Methods: Dropdown menu with options:
+  • auto - Automatically detects the best method
+  • excel - Uses native Excel (Windows)
+  • reportlab - Uses pandas + reportlab (cross-platform)
+• Output Options: Checkbox to enable verbose output
+• Convert All Sheets: Checkbox "Converter todas as abas" to process all worksheets into a single PDF
+• Log Area: Shows conversion progress and details in real-time
+• Progress Bar: Visual indicator during conversion process
+
+#### How to Use the GUI
+
+1. Run `exceltopdf-gui` in terminal
+2. Click "Browse..." next to "Input Excel File" to select your Excel file
+3. Click "Browse..." next to "Output PDF File" to choose where to save the PDF
+4. Select the desired conversion method from the dropdown
+5. Check "Verbose output" if you want detailed information
+6. Check "Converter todas as abas" if you want to process all worksheets
+7. Click "Convert" to start the conversion
+8. Monitor progress in the log area
+
+The interface runs in a separate thread to prevent freezing during conversion and displays success or error messages at the end of the process.
 
 ### Command Line Interface (CLI)
 
@@ -75,45 +108,6 @@ exceltopdf input.xlsx output.pdf --all-sheets
 # Combine options
 exceltopdf input.xlsx output.pdf --all-sheets --verbose --method auto
 ```
-
-### Graphical User Interface (GUI)
-
-To launch the graphical interface:
-
-```bash
-exceltopdf-gui
-```
-
-Alternatively, if the command is not available:
-
-```bash
-python -m exceltopdf.gui
-```
-
-#### GUI Features
-
-• **File Selection**: Browse buttons for choosing Excel input and PDF output files
-• **Conversion Methods**: Dropdown menu with options:
-  • auto - Automatically detects the best method
-  • excel - Uses native Excel (Windows)
-  • reportlab - Uses pandas + reportlab (cross-platform)
-• **Output Options**: Checkbox to enable verbose output
-• **Convert All Sheets**: Checkbox "Converter todas as abas" to process all worksheets into a single PDF
-• **Log Area**: Shows conversion progress and details in real-time
-• **Progress Bar**: Visual indicator during conversion process
-
-#### How to Use the GUI
-
-1. Run `exceltopdf-gui` in terminal
-2. Click "Browse..." next to "Input Excel File" to select your Excel file
-3. Click "Browse..." next to "Output PDF File" to choose where to save the PDF
-4. Select the desired conversion method from the dropdown
-5. Check "Verbose output" if you want detailed information
-6. Check "Converter todas as abas" if you want to process all worksheets
-7. Click "Convert" to start the conversion
-8. Monitor progress in the log area
-
-The interface runs in a separate thread to prevent freezing during conversion and displays success or error messages at the end of the process.
 
 ### Python API
 
