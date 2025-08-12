@@ -29,6 +29,7 @@ dependencies = [
 
 [project.scripts]
 exceltopdf = "exceltopdf.cli:main"
+exceltopdf-gui = "exceltopdf.gui:main"
 
 [project.urls]
 "Homepage" = "https://github.com/dadebr/ExceltoPDF"
