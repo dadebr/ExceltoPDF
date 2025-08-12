@@ -1,5 +1,7 @@
 # ExceltoPDF
 
+[🇧🇷 Português](README.md) | [🇺🇸 English](README_EN.md)
+
 Uma ferramenta com interface gráfica e linha de comando para converter arquivos Excel para PDF com formatação otimizada, garantindo que todas as colunas caibam em uma página por planilha.
 
 > **⚠️ Aviso Importante:** Este pacote ainda não está disponível no PyPI. Para instalar, clone o repositório e instale a partir do código fonte.
@@ -194,14 +196,14 @@ twine upload dist/*
 ## Contribuição
 
 1. Faça um fork do repositório
-2. Crie uma branch para sua funcionalidade (git checkout -b feature/funcionalidade-incrivel)
-3. Faça commit das suas mudanças (git commit -m 'Adicionar funcionalidade incrível')
-4. Faça push para a branch (git push origin feature/funcionalidade-incrivel)
+2. Crie uma branch para sua funcionalidade (`git checkout -b feature/funcionalidade-incrivel`)
+3. Faça commit das suas mudanças (`git commit -m 'Adicionar funcionalidade incrível'`)
+4. Faça push para a branch (`git push origin feature/funcionalidade-incrivel`)
 5. Abra um Pull Request
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](https://github.com/dadebr/ExceltoPDF/blob/main/LICENSE) para detalhes.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ## Changelog
 
