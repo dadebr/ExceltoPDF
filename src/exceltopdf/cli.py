@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """CLI tool to convert Excel files to PDF with all columns fitting on one page per sheet."""
-
 import argparse
 import os
 import sys
@@ -8,7 +7,7 @@ import platform
 from pathlib import Path
 
 
-def convert_with_win32com(excel_path, pdf_path):
+def convert_with_win32com(excel_path, pdf_path, verbose=False, log=None):
     """Convert Excel to PDF using win32com (Windows with Excel installed)."""
     try:
         import win32com.client as win32
@@ -17,6 +16,11 @@ def convert_with_win32com(excel_path, pdf_path):
     
     excel_path = Path(excel_path).resolve()
     pdf_path = Path(pdf_path).resolve()
+    
+    if verbose and log:
+        log(f"Using win32com to convert {excel_path} to {pdf_path}")
+    elif verbose:
+        print(f"Using win32com to convert {excel_path} to {pdf_path}")
     
     # Start Excel application
     xl = win32.Dispatch("Excel.Application")
@@ -27,6 +31,11 @@ def convert_with_win32com(excel_path, pdf_path):
         # Open workbook
         wb = xl.Workbooks.Open(str(excel_path))
         
+        if verbose and log:
+            log(f"Opened workbook with {len(wb.Worksheets)} worksheets")
+        elif verbose:
+            print(f"Opened workbook with {len(wb.Worksheets)} worksheets")
+        
         # Configure each worksheet for fitting columns
         for ws in wb.Worksheets:
             ws.Activate()
@@ -34,16 +43,25 @@ def convert_with_win32com(excel_path, pdf_path):
             ws.PageSetup.FitToPagesWide = 1
             ws.PageSetup.FitToPagesTall = False
             ws.PageSetup.Zoom = False
+            if verbose and log:
+                log(f"Configured worksheet: {ws.Name}")
+            elif verbose:
+                print(f"Configured worksheet: {ws.Name}")
         
         # Export to PDF
         wb.ExportAsFixedFormat(0, str(pdf_path))  # 0 = xlTypePDF
+        
+        if verbose and log:
+            log("PDF export completed")
+        elif verbose:
+            print("PDF export completed")
         
     finally:
         wb.Close()
         xl.Quit()
 
 
-def convert_with_pandas_reportlab(excel_path, pdf_path):
+def convert_with_pandas_reportlab(excel_path, pdf_path, verbose=False, log=None):
     """Convert Excel to PDF using pandas and reportlab (fallback method)."""
     try:
         import pandas as pd
@@ -55,6 +73,11 @@ def convert_with_pandas_reportlab(excel_path, pdf_path):
     except ImportError as e:
         raise ImportError(f"Required packages not available: {e}")
     
+    if verbose and log:
+        log(f"Using pandas+reportlab to convert {excel_path} to {pdf_path}")
+    elif verbose:
+        print(f"Using pandas+reportlab to convert {excel_path} to {pdf_path}")
+    
     # Read Excel file
     excel_file = pd.ExcelFile(excel_path)
     
@@ -63,13 +86,23 @@ def convert_with_pandas_reportlab(excel_path, pdf_path):
     story = []
     styles = getSampleStyleSheet()
     
+    if verbose and log:
+        log(f"Found {len(excel_file.sheet_names)} sheets: {', '.join(excel_file.sheet_names)}")
+    elif verbose:
+        print(f"Found {len(excel_file.sheet_names)} sheets: {', '.join(excel_file.sheet_names)}")
+    
     for sheet_name in excel_file.sheet_names:
         # Read sheet
         df = pd.read_excel(excel_file, sheet_name=sheet_name)
         
+        if verbose and log:
+            log(f"Processing sheet '{sheet_name}' with {len(df)} rows and {len(df.columns)} columns")
+        elif verbose:
+            print(f"Processing sheet '{sheet_name}' with {len(df)} rows and {len(df.columns)} columns")
+        
         # Add sheet title
         if len(excel_file.sheet_names) > 1:
-            title = Paragraph(f"<b>{sheet_name}</b>", styles['Heading2'])
+            title = Paragraph(f"{sheet_name}", styles['Heading2'])
             story.append(title)
             story.append(Spacer(1, 12))
         
@@ -104,6 +137,11 @@ def convert_with_pandas_reportlab(excel_path, pdf_path):
         story.append(Spacer(1, 24))
     
     # Build PDF
+    if verbose and log:
+        log("Building PDF document")
+    elif verbose:
+        print("Building PDF document")
+    
     doc.build(story)
 
 
@@ -155,9 +193,9 @@ def main():
     
     try:
         if method == "win32com":
-            convert_with_win32com(input_path, output_path)
+            convert_with_win32com(input_path, output_path, verbose=args.verbose)
         else:
-            convert_with_pandas_reportlab(input_path, output_path)
+            convert_with_pandas_reportlab(input_path, output_path, verbose=args.verbose)
         
         if args.verbose:
             print(f"Successfully converted to '{output_path}'")
