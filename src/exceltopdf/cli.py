@@ -6,7 +6,6 @@ import sys
 import platform
 from pathlib import Path
 
-
 def merge_pdfs_with_pypdf2(pdf_paths, output_path):
     """Merge multiple PDF files into one using PyPDF2."""
     try:
@@ -31,8 +30,7 @@ def merge_pdfs_with_pypdf2(pdf_paths, output_path):
         except OSError:
             pass
 
-
-def convert_with_win32com(excel_path, pdf_path, sheets='all', verbose=False, log=None):
+def convert_with_win32com(excel_path, pdf_path, all_sheets=False, verbose=False, log=None):
     """Convert Excel to PDF using win32com (Windows with Excel installed)."""
     try:
         import win32com.client as win32
@@ -63,7 +61,7 @@ def convert_with_win32com(excel_path, pdf_path, sheets='all', verbose=False, log
         elif verbose:
             print(f"Opened workbook with {total_sheets} worksheets")
         
-        if sheets == 'all' and total_sheets > 1:
+        if all_sheets and total_sheets > 1:
             # Process all sheets - try to export to single PDF first
             try:
                 # Configure each worksheet for fitting columns
@@ -127,7 +125,7 @@ def convert_with_win32com(excel_path, pdf_path, sheets='all', verbose=False, log
                 elif verbose:
                     print("PDF export completed (merged from individual sheets)")
         else:
-            # Process single sheet or 'selected' mode (default behavior)
+            # Process single sheet or default behavior
             # Configure each worksheet for fitting columns (in case there are multiple)
             for ws in wb.Worksheets:
                 ws.Activate()
@@ -152,8 +150,7 @@ def convert_with_win32com(excel_path, pdf_path, sheets='all', verbose=False, log
         wb.Close()
         xl.Quit()
 
-
-def convert_with_pandas_reportlab(excel_path, pdf_path, sheets='all', verbose=False, log=None):
+def convert_with_pandas_reportlab(excel_path, pdf_path, all_sheets=False, verbose=False, log=None):
     """Convert Excel to PDF using pandas and reportlab (fallback method)."""
     try:
         import pandas as pd
@@ -184,8 +181,8 @@ def convert_with_pandas_reportlab(excel_path, pdf_path, sheets='all', verbose=Fa
     elif verbose:
         print(f"Found {len(sheet_names)} sheets: {', '.join(sheet_names)}")
     
-    # Process sheets based on the sheets parameter
-    sheets_to_process = sheet_names if sheets == 'all' else sheet_names[:1] if sheet_names else []
+    # Process sheets based on the all_sheets parameter
+    sheets_to_process = sheet_names if all_sheets else sheet_names[:1] if sheet_names else []
     
     for i, sheet_name in enumerate(sheets_to_process):
         # Read sheet
@@ -245,7 +242,6 @@ def convert_with_pandas_reportlab(excel_path, pdf_path, sheets='all', verbose=Fa
     
     doc.build(story)
 
-
 def main():
     """Main CLI function."""
     parser = argparse.ArgumentParser(
@@ -260,10 +256,9 @@ def main():
         help="Conversion method to use (default: auto)"
     )
     parser.add_argument(
-        "--sheets",
-        choices=["all", "selected"],
-        default="all",
-        help="Process 'all' sheets in a single PDF or 'selected' sheets (default: all)"
+        "--all-sheets",
+        action="store_true",
+        help="Convert all sheets in Excel file to single PDF (default: False)"
     )
     parser.add_argument(
         "--verbose", "-v", 
@@ -297,13 +292,13 @@ def main():
     
     if args.verbose:
         print(f"Converting '{input_path}' to '{output_path}' using method: {method}")
-        print(f"Processing sheets: {args.sheets}")
+        print(f"Processing all sheets: {args.all_sheets}")
     
     try:
         if method == "win32com":
-            convert_with_win32com(input_path, output_path, sheets=args.sheets, verbose=args.verbose)
+            convert_with_win32com(input_path, output_path, all_sheets=args.all_sheets, verbose=args.verbose)
         else:
-            convert_with_pandas_reportlab(input_path, output_path, sheets=args.sheets, verbose=args.verbose)
+            convert_with_pandas_reportlab(input_path, output_path, all_sheets=args.all_sheets, verbose=args.verbose)
         
         if args.verbose:
             print(f"Successfully converted to '{output_path}'")
@@ -323,7 +318,6 @@ def main():
     except Exception as e:
         print(f"Error during conversion: {e}", file=sys.stderr)
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
