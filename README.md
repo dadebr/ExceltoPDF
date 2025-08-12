@@ -66,6 +66,12 @@ exceltopdf input.xlsx output.pdf --method pandas
 
 # Auto-detect best method (default)
 exceltopdf input.xlsx output.pdf --method auto
+
+# Convert all sheets in Excel file to single PDF
+exceltopdf input.xlsx output.pdf --all-sheets
+
+# Combine options
+exceltopdf input.xlsx output.pdf --all-sheets --verbose --method auto
 ```
 
 ### Python API
@@ -104,10 +110,11 @@ exceltopdf-gui
 
 • **Seleção de Arquivos**: Botões "Browse" para escolher arquivos Excel de entrada e PDF de saída
 • **Métodos de Conversão**: Menu dropdown com opções:
-  • `auto` - Detecta automaticamente o melhor método
-  • `excel` - Usa Excel nativo (Windows)
-  • `reportlab` - Usa pandas + reportlab (multiplataforma)
+  • auto - Detecta automaticamente o melhor método
+  • excel - Usa Excel nativo (Windows)
+  • reportlab - Usa pandas + reportlab (multiplataforma)
 • **Opções de Saída**: Checkbox para habilitar saída verbose
+• **Converter Todas as Abas**: Checkbox "Converter todas as abas" para processar todas as planilhas em um único PDF
 • **Área de Log**: Mostra o progresso e detalhes da conversão em tempo real
 • **Barra de Progresso**: Indicador visual durante o processo de conversão
 
@@ -118,15 +125,16 @@ exceltopdf-gui
 3. Clique em "Browse..." ao lado de "Output PDF File" para escolher onde salvar o PDF
 4. Selecione o método de conversão desejado no dropdown
 5. Marque "Verbose output" se desejar ver informações detalhadas
-6. Clique em "Convert" para iniciar a conversão
-7. Acompanhe o progresso na área de log
+6. Marque "Converter todas as abas" se desejar processar todas as planilhas
+7. Clique em "Convert" para iniciar a conversão
+8. Acompanhe o progresso na área de log
 
 A interface roda em thread separada para não travar durante a conversão e exibe mensagens de sucesso ou erro ao final do processo.
 
 ## Supported File Formats
 
-• Input: .xlsx, .xls
-• Output: .pdf
+• **Input**: .xlsx, .xls
+• **Output**: .pdf
 
 ## How It Works
 
@@ -155,6 +163,9 @@ exceltopdf financial_data.xlsx financial_data.pdf -v
 
 # Force cross-platform method
 exceltopdf data.xlsx output.pdf --method pandas
+
+# Convert all sheets to single PDF
+exceltopdf workbook.xlsx complete_report.pdf --all-sheets
 ```
 
 ## Development
@@ -193,9 +204,9 @@ twine upload dist/*
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch (git checkout -b feature/amazing-feature)
-3. Commit your changes (git commit -m 'Add some amazing feature')
-4. Push to the branch (git push origin feature/amazing-feature)
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ## License
@@ -217,11 +228,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Common Issues
 
 **"Failed to import win32com"**
-• Install pywin32: pip install pywin32
-• Or use pandas method: --method pandas
+• Install pywin32: `pip install pywin32`
+• Or use pandas method: `--method pandas`
 
 **"Required packages not available"**
-• Install dependencies: pip install pandas openpyxl reportlab
+• Install dependencies: `pip install pandas openpyxl reportlab`
 
 **"Input file does not exist"**
 • Check file path and ensure file exists
