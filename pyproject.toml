@@ -25,6 +25,7 @@ dependencies = [
     "openpyxl",
     "reportlab",
     "click",
+    "PyPDF2",
 ]
 
 [project.scripts]
