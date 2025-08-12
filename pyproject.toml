@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "exceltopdf"
+version = "0.1.0"
+description = "Convert Excel files to PDF with all columns fitting on one page per sheet"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "pandas",
+    "openpyxl",
+    "reportlab",
+    "click",
+]
+
+[project.scripts]
+exceltopdf = "exceltopdf.cli:main"
+
+[project.urls]
+"Homepage" = "https://github.com/dadebr/ExceltoPDF"
+"Bug Reports" = "https://github.com/dadebr/ExceltoPDF/issues"
+"Source" = "https://github.com/dadebr/ExceltoPDF"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/exceltopdf"]
