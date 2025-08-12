@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 """
 Tkinter GUI for ExceltoPDF
-
 A graphical user interface for converting Excel files to PDF with various options.
 """
-
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import threading
 import os
 from .cli import convert_with_pandas_reportlab, convert_with_win32com
-
 
 class ExcelToPDFGUI:
     def __init__(self, root):
@@ -23,6 +20,7 @@ class ExcelToPDFGUI:
         self.output_file = tk.StringVar()
         self.method = tk.StringVar(value="auto")
         self.verbose = tk.BooleanVar()
+        self.all_sheets = tk.BooleanVar()
         
         self.setup_ui()
         
@@ -70,9 +68,17 @@ class ExcelToPDFGUI:
         method_combo['values'] = ('auto', 'excel', 'reportlab')
         method_combo.grid(row=0, column=0, sticky="w")
         
+        # Options frame for checkboxes
+        options_frame = ttk.Frame(main_frame)
+        options_frame.grid(row=3, column=1, columnspan=2, sticky="w", pady=(10, 5))
+        
         # Verbose checkbox
-        ttk.Checkbutton(main_frame, text="Verbose output", variable=self.verbose).grid(
-            row=3, column=1, sticky="w", pady=(10, 5))
+        ttk.Checkbutton(options_frame, text="Verbose output", variable=self.verbose).grid(
+            row=0, column=0, sticky="w", padx=(0, 10))
+        
+        # All sheets checkbox
+        ttk.Checkbutton(options_frame, text="Converter todas as abas", variable=self.all_sheets).grid(
+            row=0, column=1, sticky="w")
         
         # Convert button
         self.convert_btn = ttk.Button(main_frame, text="Convert", command=self.start_conversion)
@@ -154,11 +160,13 @@ class ExcelToPDFGUI:
             output_path = self.output_file.get()
             method = self.method.get()
             verbose = self.verbose.get()
+            all_sheets = self.all_sheets.get()
             
             self.log_message(f"Starting conversion...")
             self.log_message(f"Input: {input_path}")
             self.log_message(f"Output: {output_path}")
             self.log_message(f"Method: {method}")
+            self.log_message(f"Convert all sheets: {all_sheets}")
             self.log_message("")
             
             if not os.path.exists(input_path):
@@ -170,16 +178,16 @@ class ExcelToPDFGUI:
                 try:
                     import win32com.client
                     self.log_message("Auto-detected: Using Excel (win32com) method")
-                    convert_with_win32com(input_path, output_path, verbose=verbose)
+                    convert_with_win32com(input_path, output_path, all_sheets=all_sheets, verbose=verbose, log=self.log_message)
                 except ImportError:
                     self.log_message("Auto-detected: Using ReportLab (pandas) method")
-                    convert_with_pandas_reportlab(input_path, output_path, verbose=verbose)
+                    convert_with_pandas_reportlab(input_path, output_path, all_sheets=all_sheets, verbose=verbose, log=self.log_message)
             elif method == "excel":
                 self.log_message("Using Excel (win32com) method")
-                convert_with_win32com(input_path, output_path, verbose=verbose)
+                convert_with_win32com(input_path, output_path, all_sheets=all_sheets, verbose=verbose, log=self.log_message)
             elif method == "reportlab":
                 self.log_message("Using ReportLab (pandas) method")
-                convert_with_pandas_reportlab(input_path, output_path, verbose=verbose)
+                convert_with_pandas_reportlab(input_path, output_path, all_sheets=all_sheets, verbose=verbose, log=self.log_message)
                 
             self.log_message("")
             self.log_message("Conversion completed successfully!")
@@ -207,13 +215,11 @@ class ExcelToPDFGUI:
         self.convert_btn.config(state="normal")
         self.progress.stop()
 
-
 def main():
     """Main entry point for the GUI application."""
     root = tk.Tk()
     app = ExcelToPDFGUI(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
