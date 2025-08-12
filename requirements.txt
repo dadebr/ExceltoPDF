@@ -1,0 +1,12 @@
+# Core dependencies
+pandas>=1.3.0
+openpyxl>=3.0.0
+reportlab>=3.6.0
+click>=8.0.0
+
+# Development dependencies (optional)
+pytest>=6.0.0
+pytest-cov>=2.12.0
+black>=21.0.0
+flake8>=3.9.0
+mypy>=0.910
