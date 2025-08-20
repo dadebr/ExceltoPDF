@@ -2,24 +2,24 @@
 
 [🇧🇷 Português](README.md) | [🇺🇸 English](README_EN.md)
 
-Uma ferramenta com interface gráfica e linha de comando para converter arquivos Excel para PDF com formatação otimizada, garantindo que todas as colunas caibam em uma página por planilha.
+A tool with graphical and command-line interface for converting Excel files to PDF with optimized formatting, ensuring all columns fit on one page per worksheet.
 
-> **⚠️ Aviso Importante:** Este pacote ainda não está disponível no PyPI. Para instalar, clone o repositório e instale a partir do código fonte.
+> **⚠️ Important Notice:** This package is not yet available on PyPI. To install, clone the repository and install from source code.
 
-## Funcionalidades
+## Features
 
-• **Ajuste Inteligente de Colunas**: Ajusta automaticamente todas as colunas para caber na largura de uma página por planilha
-• **Múltiplos Métodos de Conversão**:
-  • Windows com Excel instalado: Usa win32com para exportação nativa do Excel para PDF
-  • Alternativa multiplataforma: Usa pandas + reportlab para compatibilidade universal
-• **Processamento em Lote**: Processa múltiplas planilhas em um único arquivo Excel
-• **Interface de Linha de Comando**: Fácil de usar no terminal ou scripts
-• **Interface Gráfica**: GUI amigável com seletores de arquivo e opções
-• **Saída Flexível**: Mantém a integridade dos dados enquanto otimiza o layout
+• **Smart Column Adjustment**: Automatically adjusts all columns to fit the width of one page per worksheet
+• **Multiple Conversion Methods**:
+  • Windows with Excel installed: Uses win32com for native Excel to PDF export
+  • Cross-platform alternative: Uses pandas + reportlab for universal compatibility
+• **Batch Processing**: Processes multiple worksheets in a single Excel file
+• **Command Line Interface**: Easy to use in terminal or scripts
+• **Graphical Interface**: User-friendly GUI with file selectors and options
+• **Flexible Output**: Maintains data integrity while optimizing layout
 
-## Instalação
+## Installation
 
-### A Partir do Código Fonte (recomendado)
+### From Source Code (recommended)
 
 ```bash
 git clone https://github.com/dadebr/ExceltoPDF.git
@@ -27,142 +27,142 @@ cd ExceltoPDF
 pip install -e .
 ```
 
-### Dependências
+### Dependencies
 
-A ferramenta usará automaticamente o melhor método disponível:
+The tool will automatically use the best available method:
 
-Para Windows com Microsoft Excel:
+For Windows with Microsoft Excel:
 ```bash
 pip install pywin32
 ```
 
-Para compatibilidade multiplataforma:
+For cross-platform compatibility:
 ```bash
 pip install pandas openpyxl reportlab
 ```
 
-Todas as dependências estão listadas em requirements.txt e serão instaladas automaticamente.
+All dependencies are listed in requirements.txt and will be installed automatically.
 
-## Uso
+## Usage
 
-### Interface Gráfica
+### Graphical Interface
 
-Para executar a interface gráfica:
+To run the graphical interface:
 ```bash
 exceltopdf-gui
 ```
 
-Alternativamente, se o comando não estiver disponível:
+Alternatively, if the command is not available:
 ```bash
 python -m exceltopdf.gui
 ```
 
-#### Funcionalidades da Interface Gráfica
+#### Graphical Interface Features
 
-• **Seleção de Arquivos**: Botões de navegação para escolher arquivos Excel de entrada e PDF de saída
-• **Métodos de Conversão**: Menu suspenso com opções:
-  • auto - Detecta automaticamente o melhor método
-  • excel - Usa o Excel nativo (Windows)
-  • reportlab - Usa pandas + reportlab (multiplataforma)
-• **Opções de Saída**: Caixa de seleção para habilitar saída detalhada
-• **Converter Todas as Abas**: Caixa de seleção "Converter todas as abas" para processar todas as planilhas em um único PDF
-• **Área de Log**: Mostra o progresso da conversão e detalhes em tempo real
-• **Barra de Progresso**: Indicador visual durante o processo de conversão
+• **File Selection**: Navigation buttons to choose input Excel files and output PDF
+• **Conversion Methods**: Dropdown menu with options:
+  • auto - Automatically detects the best method
+  • excel - Uses native Excel (Windows)
+  • reportlab - Uses pandas + reportlab (cross-platform)
+• **Output Options**: Checkbox to enable verbose output
+• **Convert All Sheets**: "Convert all sheets" checkbox to process all worksheets into a single PDF
+• **Log Area**: Shows conversion progress and details in real-time
+• **Progress Bar**: Visual indicator during the conversion process
 
-#### Como Usar a Interface Gráfica
+#### How to Use the Graphical Interface
 
-1. Execute `exceltopdf-gui` no terminal
-2. Clique em "Browse..." ao lado de "Input Excel File" para selecionar seu arquivo Excel
-3. Clique em "Browse..." ao lado de "Output PDF File" para escolher onde salvar o PDF
-4. Selecione o método de conversão desejado no menu suspenso
-5. Marque "Verbose output" se quiser informações detalhadas
-6. Marque "Converter todas as abas" se quiser processar todas as planilhas
-7. Clique em "Convert" para iniciar a conversão
-8. Monitore o progresso na área de log
+1. Run `exceltopdf-gui` in the terminal
+2. Click "Browse..." next to "Input Excel File" to select your Excel file
+3. Click "Browse..." next to "Output PDF File" to choose where to save the PDF
+4. Select the desired conversion method from the dropdown menu
+5. Check "Verbose output" if you want detailed information
+6. Check "Convert all sheets" if you want to process all worksheets
+7. Click "Convert" to start the conversion
+8. Monitor progress in the log area
 
-A interface executa em uma thread separada para prevenir travamento durante a conversão e exibe mensagens de sucesso ou erro ao final do processo.
+The interface runs in a separate thread to prevent freezing during conversion and displays success or error messages at the end of the process.
 
-### Interface de Linha de Comando
+### Command Line Interface
 
-#### Uso Básico
+#### Basic Usage
 
 ```bash
-# Converter arquivo Excel para PDF
+# Convert Excel file to PDF
 exceltopdf input.xlsx output.pdf
 
-# Com saída detalhada
+# With verbose output
 exceltopdf input.xlsx output.pdf --verbose
 ```
 
-#### Opções Avançadas
+#### Advanced Options
 
 ```bash
-# Forçar método de conversão específico
+# Force specific conversion method
 exceltopdf input.xlsx output.pdf --method win32com
 exceltopdf input.xlsx output.pdf --method pandas
 
-# Detectar automaticamente o melhor método (padrão)
+# Automatically detect the best method (default)
 exceltopdf input.xlsx output.pdf --method auto
 
-# Converter todas as abas do arquivo Excel para um único PDF
+# Convert all sheets from Excel file to a single PDF
 exceltopdf input.xlsx output.pdf --all-sheets
 
-# Combinar opções
+# Combine options
 exceltopdf input.xlsx output.pdf --all-sheets --verbose --method auto
 ```
 
-### API Python
+### Python API
 
 ```python
 from exceltopdf.cli import convert_with_pandas_reportlab, convert_with_win32com
 
-# Usando pandas/reportlab (multiplataforma)
+# Using pandas/reportlab (cross-platform)
 convert_with_pandas_reportlab('input.xlsx', 'output.pdf')
 
-# Usando win32com (Windows + Excel apenas)
+# Using win32com (Windows + Excel only)
 convert_with_win32com('input.xlsx', 'output.pdf')
 ```
 
-## Formatos Suportados
+## Supported Formats
 
-• **Entrada**: .xlsx, .xls
-• **Saída**: .pdf
+• Input: .xlsx, .xls
+• Output: .pdf
 
-## Funcionamento
+## How It Works
 
-### Método 1: win32com (Windows + Excel)
+### Method 1: win32com (Windows + Excel)
 
-• Usa a funcionalidade de exportação PDF integrada do Microsoft Excel
-• Configura a configuração da página para ajustar todas as colunas em uma página
-• Fornece a saída de maior qualidade com formatação nativa
-• Aplica automaticamente escalonamento para garantir que as colunas se ajustem
+• Uses Microsoft Excel's built-in PDF export functionality
+• Configures page setup to fit all columns on one page
+• Provides highest quality output with native formatting
+• Automatically applies scaling to ensure columns fit
 
-### Método 2: pandas + reportlab (Multiplataforma)
+### Method 2: pandas + reportlab (Cross-platform)
 
-• Lê dados do Excel usando pandas
-• Converte para PDF usando reportlab
-• Calcula automaticamente as larguras das colunas para caber na página
-• Funciona em qualquer plataforma sem o Excel instalado
+• Reads Excel data using pandas
+• Converts to PDF using reportlab
+• Automatically calculates column widths to fit the page
+• Works on any platform without Excel installed
 
-## Exemplos
+## Examples
 
 ```bash
-# Conversão simples
+# Simple conversion
 exceltopdf sales_report.xlsx sales_report.pdf
 
-# Conversão com log detalhado
+# Conversion with detailed logging
 exceltopdf financial_data.xlsx financial_data.pdf -v
 
-# Forçar método multiplataforma
+# Force cross-platform method
 exceltopdf data.xlsx output.pdf --method pandas
 
-# Converter todas as abas para um único PDF
+# Convert all sheets to a single PDF
 exceltopdf workbook.xlsx complete_report.pdf --all-sheets
 ```
 
-## Desenvolvimento
+## Development
 
-### Configurar Ambiente de Desenvolvimento
+### Setting Up Development Environment
 
 ```bash
 git clone https://github.com/dadebr/ExceltoPDF.git
@@ -170,76 +170,76 @@ cd ExceltoPDF
 pip install -e .[dev]
 ```
 
-### Executar Testes
+### Running Tests
 
 ```bash
-# Executar todos os testes
+# Run all tests
 pytest
 
-# Executar com cobertura
+# Run with coverage
 pytest --cov=exceltopdf
 
-# Executar arquivo de teste específico
+# Run specific test file
 pytest tests/test_basic.py
 ```
 
-### Build do Pacote
+### Building Package
 
 ```bash
-# Construir pacotes de distribuição
+# Build distribution packages
 python -m build
 
-# Upload para PyPI (apenas mantenedores)
+# Upload to PyPI (maintainers only)
 twine upload dist/*
 ```
 
-## Contribuição
+## Contributing
 
-1. Faça um fork do repositório
-2. Crie uma branch para sua funcionalidade (`git checkout -b feature/funcionalidade-incrivel`)
-3. Faça commit das suas mudanças (`git commit -m 'Adicionar funcionalidade incrível'`)
-4. Faça push para a branch (`git push origin feature/funcionalidade-incrivel`)
-5. Abra um Pull Request
+1. Fork the repository
+2. Create a branch for your feature (git checkout -b feature/amazing-feature)
+3. Commit your changes (git commit -m 'Add amazing feature')
+4. Push to the branch (git push origin feature/amazing-feature)
+5. Open a Pull Request
 
-## Licença
+## License
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
 
 ### v0.1.0
 
-• Lançamento inicial
-• Conversão básica de Excel para PDF
-• Compatibilidade multiplataforma
-• Interface de linha de comando
-• Ajuste automático de colunas
+• Initial release
+• Basic Excel to PDF conversion
+• Cross-platform compatibility
+• Command line interface
+• Automatic column adjustment
 
-## Solução de Problemas
+## Troubleshooting
 
-### Problemas Comuns
+### Common Issues
 
 **"Failed to import win32com"**
-• Instale pywin32: `pip install pywin32`
-• Ou use o método pandas: `--method pandas`
+• Install pywin32: `pip install pywin32`
+• Or use the pandas method: `--method pandas`
 
 **"Required packages not available"**
-• Instale as dependências: `pip install pandas openpyxl reportlab`
+• Install dependencies: `pip install pandas openpyxl reportlab`
 
 **"Input file does not exist"**
-• Verifique o caminho do arquivo e certifique-se de que o arquivo existe
-• Use caminhos absolutos se necessário
+• Check the file path and make sure the file exists
+• Use absolute paths if necessary
 
-**Saída PDF está cortada**
-• A ferramenta ajusta automaticamente as colunas, mas planilhas muito largas podem precisar de ajuste manual
-• Considere usar orientação paisagem no arquivo Excel de origem
+**PDF output is cut off**
+• The tool automatically adjusts columns, but very wide spreadsheets may need manual adjustment
+• Consider using landscape orientation in the source Excel file
 
-## Suporte
+## Support
 
-Se você encontrar problemas ou tiver dúvidas:
+If you encounter issues or have questions:
 
-1. Verifique a [seção de solução de problemas](#solução-de-problemas)
-2. Pesquise [issues existentes](https://github.com/dadebr/ExceltoPDF/issues)
-3. Crie uma [nova issue](https://github.com/dadebr/ExceltoPDF/issues/new) com detalhes sobre seu problema
+1. Check the [troubleshooting section](#troubleshooting)
+2. Search [existing issues](https://github.com/dadebr/ExceltoPDF/issues)
+3. Create a [new issue](https://github.com/dadebr/ExceltoPDF/issues/new) with details about your problem
 
-Feito com ❤️ para facilitar a conversão de Excel para PDF
+Made with ❤️ to make Excel to PDF conversion easier
